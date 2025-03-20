@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track if user is logged in
+  const [userProfile, setUserProfile] = useState(null); // Store user profile info (like avatar)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +15,20 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Simulate checking if the user is logged in (you can replace this with real authentication logic)
+  const checkLoginStatus = () => {
+    // If a user is logged in, set the profile info
+    const user = JSON.parse(localStorage.getItem('user')); // Example of storing user info in localStorage
+    if (user) {
+      setIsLoggedIn(true);
+      setUserProfile(user); // Store user profile info (e.g., avatar)
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus(); // Check login status when the component mounts
   }, []);
 
   return (
@@ -48,12 +64,21 @@ const Navbar = () => {
           </div>
           <NavLink to="/contact">Contact</NavLink>
         </div>
-        
-        {/* Login Button */}
-        <Link to="/login" className="hidden md:block px-4 py-2 text-white bg-harmony-600 rounded-md hover:bg-harmony-700 transition-colors duration-200">
-          Login
-        </Link>
-        
+
+        {/* Conditional Rendering for Login or Profile */}
+        {isLoggedIn ? (
+          <div className="flex items-center space-x-4">
+            {/* Display Profile Image if logged in */}
+            <div className="w-10 h-10 rounded-full overflow-hidden">
+              <img src={userProfile?.avatar || '/default-avatar.jpg'} alt="Profile" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        ) : (
+          <Link to="/login" className="hidden md:block px-4 py-2 text-white bg-harmony-600 rounded-md hover:bg-harmony-700 transition-colors duration-200">
+            Create Account
+          </Link>
+        )}
+
         {/* Mobile Menu Button */}
         <button className="md:hidden focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
