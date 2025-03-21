@@ -21,6 +21,11 @@ const Contact = () => {
       .then((result) => {
         console.log(result);
         alert('Message sent successfully!');
+      setName('');
+      setSubject('');
+      setEmail('');
+      setMessage('');
+      setErrorMessage('');
       })
       .catch((error) => {
         console.error("There was an error sending the message:", error);
