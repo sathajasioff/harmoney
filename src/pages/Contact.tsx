@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';  // Make sure axios is imported
 
+
 const Contact = () => {
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+ 
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +30,7 @@ const Contact = () => {
       setMessage('');
       setErrorMessage('');
       })
+   
       .catch((error) => {
         console.error("There was an error sending the message:", error);
         setErrorMessage('Failed to send the message. Please try again later.');
