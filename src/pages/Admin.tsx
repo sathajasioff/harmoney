@@ -1,10 +1,22 @@
-import React, { useState } from 'react'; // Import React and useState
-
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from "@/components/Navbar"; // Assuming the Navbar component is located in this path
 
 const Admin = () => {
-  const [showNavbar, setShowNavbar] = useState(false); // State to control Navbar visibility
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [contactCount, setContactCount] = useState(0); // State for contact messages count
+
+  // Fetch Contact Us count
+  useEffect(() => {
+    axios.get('http://localhost:3001/ContactMessages/count')
+      .then((response) => {
+        setContactCount(response.data.count);
+      })
+      .catch((error) => {
+        console.error('Error fetching contact count:', error);
+      });
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -14,24 +26,12 @@ const Admin = () => {
 
       <div className="bg-gray-800 text-white w-64 p-6">
         <ul>
-          <li className="mb-4">
-            <Link to="/admin" className="hover:text-gray-400">Dashboard</Link>
-          </li>
-          <li className="mb-4">
-            <Link to="/adminuser" className="hover:text-gray-400">Users Management</Link>
-          </li>
-          <li className="mb-4">
-            <Link to="/admincontactus" className="hover:text-gray-400">Contact Us request</Link>
-          </li>
-          <li className="mb-4">
-            <Link to="/adminbranch" className="hover:text-gray-400">Branch Management</Link>
-          </li>
-          <li className="mb-4">
-            <Link to="/adminevent" className="hover:text-gray-400">Event Management</Link>
-          </li>
-          <li className="mb-4">
-            <Link to="/logout" className="hover:text-gray-400">Logout</Link>
-          </li>
+          <li className="mb-4"><Link to="/admin" className="hover:text-gray-400">Dashboard</Link></li>
+          <li className="mb-4"><Link to="/adminuser" className="hover:text-gray-400">Users Management</Link></li>
+          <li className="mb-4"><Link to="/admincontactus" className="hover:text-gray-400">Contact Us request</Link></li>
+          <li className="mb-4"><Link to="/adminbranch" className="hover:text-gray-400">Branch Management</Link></li>
+          <li className="mb-4"><Link to="/adminevent" className="hover:text-gray-400">Event Management</Link></li>
+          <li className="mb-4"><Link to="/logout" className="hover:text-gray-400">Logout</Link></li>
         </ul>
       </div>
 
@@ -47,7 +47,7 @@ const Admin = () => {
 
           <div className="bg-white shadow-lg rounded-lg p-6">
             <h3 className="text-xl font-semibold mb-4">Contact us</h3>
-            <p className="text-3xl font-bold text-yellow-500">75</p>
+            <p className="text-3xl font-bold text-yellow-500">{contactCount}</p>
           </div>
         </div>
       </div>
