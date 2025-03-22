@@ -81,7 +81,63 @@ app.get('/ContactMessages/:id', async (req, res) => {
   }
 });
 
+// Create a new branch
+app.post('/branches', async (req, res) => {
+  try {
+    const branch = await BranchModel.create(req.body);
+    res.status(201).json(branch);
+  } catch (err) {
+    res.status(500).json({ error: 'Error creating branch' });
+  }
+});
+// Get all branches
+app.get('/branches', async (req, res) => {
+  try {
+    const branches = await BranchModel.find();
+    res.json(branches);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching branches' });
+  }
+});
+// Get a single branch by ID
+app.get('/branches/:id', async (req, res) => {
+  const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid branch ID' });
+  }
+
+  try {
+    const branch = await BranchModel.findById(id);
+    if (!branch) {
+      return res.status(404).json({ error: 'Branch not found' });
+    }
+    res.json(branch);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error fetching branch' });
+  }
+});
+
+// Delete a branch by ID
+app.delete('/branches/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid branch ID' });
+  }
+
+  try {
+    const deletedBranch = await BranchModel.findByIdAndDelete(id);
+    if (!deletedBranch) {
+      return res.status(404).json({ error: 'Branch not found' });
+    }
+    res.json({ message: 'Branch deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error deleting branch' });
+  }
+});
 
 
 
