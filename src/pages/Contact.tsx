@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';  // Make sure axios is imported
+
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -6,6 +8,8 @@ const Contact = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+ 
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,9 +20,23 @@ const Contact = () => {
       return;
     }
 
-    // Handle the contact form submission logic here (e.g., send an email)
-    setErrorMessage('');
-    alert('Message sent successfully!');
+    axios.post("http://localhost:3001/Contact", { name, subject, email, message })
+      .then((result) => {
+        console.log(result);
+        alert('Message sent successfully!');
+      setName('');
+      setSubject('');
+      setEmail('');
+      setMessage('');
+      setErrorMessage('');
+      })
+   
+      .catch((error) => {
+        console.error("There was an error sending the message:", error);
+        setErrorMessage('Failed to send the message. Please try again later.');
+      });
+
+    setErrorMessage('');  // Clear the error message
   };
 
   return (
