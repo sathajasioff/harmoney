@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Navbar from "@/components/Navbar"; // Assuming the Navbar component is located in this path
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Navbar from "@/components/Navbar"; // Assuming Navbar component is in this path
+import { FaUsers, FaEnvelope } from "react-icons/fa"; // Icons for UI enhancement
 
 const Admin = () => {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -9,45 +10,89 @@ const Admin = () => {
 
   // Fetch Contact Us count
   useEffect(() => {
-    axios.get('http://localhost:3001/ContactMessages/count')
+    axios
+      .get("http://localhost:3001/ContactMessages/count")
       .then((response) => {
         setContactCount(response.data.count);
       })
       .catch((error) => {
-        console.error('Error fetching contact count:', error);
+        console.error("Error fetching contact count:", error);
       });
   }, []);
 
   return (
-    <div className="flex h-screen">
-      
-      {/* Conditionally render the Navbar */}
-      {showNavbar && <Navbar />} 
-
-      <div className="bg-gray-800 text-white w-64 p-6">
-        <ul>
-          <li className="mb-4"><Link to="/admin" className="hover:text-gray-400">Dashboard</Link></li>
-          <li className="mb-4"><Link to="/adminuser" className="hover:text-gray-400">Users Management</Link></li>
-          <li className="mb-4"><Link to="/admincontactus" className="hover:text-gray-400">Contact Us request</Link></li>
-          <li className="mb-4"><Link to="/adminbranch" className="hover:text-gray-400">Branch Management</Link></li>
-          <li className="mb-4"><Link to="/adminevent" className="hover:text-gray-400">Event Management</Link></li>
-          <li className="mb-4"><Link to="/logout" className="hover:text-gray-400">Logout</Link></li>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className="bg-gray-900 text-white w-72 p-6 shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
+        <ul className="space-y-4">
+          <li>
+            <Link to="/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to="/adminuser" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Users Management
+            </Link>
+          </li>
+          <li>
+            <Link to="/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Contact Us Request
+            </Link>
+          </li>
+          <li>
+            <Link to="/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Branch Management
+            </Link>
+          </li>
+          <li>
+            <Link to="/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Event Management
+            </Link>
+          </li>
+          <li>
+            <Link to="/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
+              Logout
+            </Link>
+          </li>
         </ul>
       </div>
 
-      <div className="flex-1 p-8 bg-gray-100">
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        {/* Navbar Toggle Button */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-700">Welcome to the Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            onClick={() => setShowNavbar(!showNavbar)}
+          >
+            {showNavbar ? "Hide Navbar" : "Show Navbar"}
+          </button>
         </div>
+
+        {/* Render Navbar Conditionally */}
+        {showNavbar && <Navbar />}
+
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Total Users</h3>
-            <p className="text-3xl font-bold text-blue-500">1,245</p>
+          {/* Total Users Card */}
+          <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg rounded-xl p-6 flex items-center space-x-4">
+            <FaUsers className="text-4xl" />
+            <div>
+              <h3 className="text-lg font-semibold">Total Users</h3>
+              <p className="text-3xl font-bold">1,245</p>
+            </div>
           </div>
 
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Contact us</h3>
-            <p className="text-3xl font-bold text-yellow-500">{contactCount}</p>
+          {/* Contact Us Card */}
+          <div className="bg-gradient-to-r from-yellow-500 to-yellow-700 text-white shadow-lg rounded-xl p-6 flex items-center space-x-4">
+            <FaEnvelope className="text-4xl" />
+            <div>
+              <h3 className="text-lg font-semibold">Contact Requests</h3>
+              <p className="text-3xl font-bold">{contactCount}</p>
+            </div>
           </div>
         </div>
       </div>
