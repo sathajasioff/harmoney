@@ -7,6 +7,7 @@ import AboutUs from '@/components/AboutUs';
 import Footer from '@/components/Footer';
 import Gallery from '@/components/gallery';
 
+
 const Index = () => {
   // Add scroll animation functionality
   useEffect(() => {
@@ -43,6 +44,7 @@ const Index = () => {
         <Hero />
         <LoanCalculator />
         <Gallery />
+       
         <AboutUs />
       </main>
       

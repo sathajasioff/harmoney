@@ -1,34 +1,33 @@
 import { useState, useEffect } from 'react';
 import { Image as ImageIcon, X } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 
-// Sample default images for the gallery
-const defaultImages = [
-  {
-    id: 1,
-    url: 'https://images.unsplash.com/photo-1560523159-4a9692d222ef?auto=format&fit=crop&q=80&w=1200',
-    title: 'Investment Workshop',
-    date: '2023-10-15'
-  },
-  {
-    id: 2,
-    url: 'https://images.unsplash.com/photo-1591115765373-5207764f72e4?auto=format&fit=crop&q=80&w=1200',
-    title: 'Client Appreciation Event',
-    date: '2023-09-22'
-  },
-  {
-    id: 3,
-    url: 'https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&q=80&w=1200',
-    title: 'Financial Planning Seminar',
-    date: '2023-08-05'
-  }
-];
+interface Event {
+  _id: string;
+  name: string;
+  date: string;
+  image: string;
+  description: string;
+}
 
 const Gallery = () => {
-  const [images, setImages] = useState<Array<{ id: number; url: string; title: string; date: string }>>(defaultImages);
+  const [events, setEvents] = useState<Event[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+
+  // Fetch events from the API on component mount
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/events');
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Intersection Observer for animation
   useEffect(() => {
@@ -54,8 +53,8 @@ const Gallery = () => {
     };
   }, []);
 
-  const handleRemoveImage = (id: number) => {
-    setImages(images.filter(img => img.id !== id));
+  const handleRemoveImage = (id: string) => {
+    setEvents(events.filter(event => event._id !== id));
   };
 
   return (
@@ -85,29 +84,30 @@ const Gallery = () => {
         >
           <div className="glass-card rounded-2xl overflow-hidden">
             <div className="p-6">
-              {images.length > 0 ? (
+              {events.length > 0 ? (
                 <Carousel className="w-full max-w-3xl mx-auto">
                   <CarouselContent>
-                    {images.map((image) => (
-                      <CarouselItem key={image.id} className="relative">
+                    {events.map((event) => (
+                      <CarouselItem key={event._id} className="relative">
                         <div className="aspect-video overflow-hidden rounded-md">
                           <img 
-                            src={image.url}
-                            alt={image.title}
+                            src={event.image}
+                            alt={event.name}
                             className="object-cover w-full h-full"
                           />
                         </div>
                         <div className="absolute top-2 right-2">
                           <button 
-                            onClick={() => handleRemoveImage(image.id)}
+                            onClick={() => handleRemoveImage(event._id)}
                             className="p-1 bg-white/80 rounded-full hover:bg-red-50 text-red-500"
                           >
                             <X size={16} />
                           </button>
                         </div>
                         <div className="mt-4 text-center">
-                          <h3 className="font-medium text-lg">{image.title}</h3>
-                          <p className="text-sm text-gray-500">{image.date}</p>
+                          <h3 className="font-medium text-lg">{event.name}</h3>
+                          <p className="text-sm text-gray-500">{new Date(event.date).toLocaleDateString()}</p>
+                          <p className="mt-2 text-sm text-gray-700">{event.description}</p>
                         </div>
                       </CarouselItem>
                     ))}

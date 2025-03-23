@@ -18,9 +18,13 @@ import Adminuser from "./pages/adminuser";
 import Admincontactus from "./pages/admincontactus";
 import Adminbranch from "./pages/adminbranch";
 import Adminevent from "./pages/adminevent";
+import Branchadd from "./pages/branchadd";
+import Eventadd from "./pages/eventadd";
 
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; // Import the Login page
+import Login from "./pages/Login"; 
+
+
 
 const queryClient = new QueryClient();
 
@@ -82,7 +86,8 @@ const App = () => (
           <Route path="/admincontactus" element={<Admincontactus />} />
           <Route path="/adminbranch" element={<Adminbranch />} />
           <Route path="/adminevent" element={<Adminevent />} />
-          
+          <Route path="/branchadd" element={<Branchadd />} />
+          <Route path="/eventadd" element={<Eventadd/>} />
           <Route path="/login" element={<Login />} /> {/* Add Login route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
