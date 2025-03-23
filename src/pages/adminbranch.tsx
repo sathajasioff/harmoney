@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const AdminBranch = () => {
-  // Dummy branch data with district information
+
   const [branches, setBranches] = useState([
     { 
       id: 1, 
@@ -12,7 +12,6 @@ const AdminBranch = () => {
       email: 'newyork@harmonyinvestment.com', 
       hours: 'Monday - Friday: 9AM - 5PM',
       district: 'District 1',
-      state: 'New York'
     },
     { 
       id: 2, 
@@ -22,7 +21,6 @@ const AdminBranch = () => {
       email: 'la@harmonyinvestment.com', 
       hours: 'Monday - Friday: 9AM - 5PM',
       district: 'District 2',
-      state: 'California'
     },
   ]);
 
@@ -42,8 +40,7 @@ const AdminBranch = () => {
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Branch Management</h1>
 
-        {/* Add Branch Button */}
-        <Link to="/addbranch">
+        <Link to="/branchadd">
           <button className="bg-green-500 text-white px-6 py-2 rounded mb-6">Add Branch</button>
         </Link>
 
@@ -54,7 +51,6 @@ const AdminBranch = () => {
               <tr className="bg-gray-200">
                 <th className="border border-gray-300 px-4 py-2">Branch Name</th>
                 <th className="border border-gray-300 px-4 py-2">District</th>
-                <th className="border border-gray-300 px-4 py-2">State</th>
                 <th className="border border-gray-300 px-4 py-2">Address</th>
                 <th className="border border-gray-300 px-4 py-2">Phone</th>
                 <th className="border border-gray-300 px-4 py-2">Email</th>
@@ -67,7 +63,6 @@ const AdminBranch = () => {
                 <tr key={branch.id} className="text-center">
                   <td className="border border-gray-300 px-4 py-2">{branch.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.district}</td>
-                  <td className="border border-gray-300 px-4 py-2">{branch.state}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.address}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.phone}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.email}</td>

@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const ContactModel = require('./models/contact');
+const BranchModel = require('./models/Branch');
+const EventModel = require('./models/event');
 
 
 
@@ -87,9 +89,12 @@ app.post('/branches', async (req, res) => {
     const branch = await BranchModel.create(req.body);
     res.status(201).json(branch);
   } catch (err) {
-    res.status(500).json({ error: 'Error creating branch' });
+    console.error('Error adding branch:', err); // Log error for better debugging
+    res.status(500).json({ error: 'Failed to add the branch. Please try again later.' });
   }
 });
+
+
 // Get all branches
 app.get('/branches', async (req, res) => {
   try {
@@ -141,6 +146,100 @@ app.delete('/branches/:id', async (req, res) => {
 
 
 
+
+
+
+
+
+// Create an event
+app.post('/events', async (req, res) => {
+  try {
+    const event = await EventModel.create(req.body);
+    res.status(201).json(event);
+  } catch (err) {
+    console.error('Error adding event:', err);
+    res.status(500).json({ error: 'Failed to add the event. Please try again later.' });
+  }
+});
+
+// Get all events
+app.get('/events', async (req, res) => {
+  try {
+    const events = await EventModel.find();
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching events' });
+  }
+});
+
+// Get a single event by ID
+app.get('/events/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid event ID' });
+  }
+
+  try {
+    const event = await EventModel.findById(id);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json(event);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error fetching event' });
+  }
+});
+
+// Update an event by ID
+app.put('/events/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid event ID' });
+  }
+
+  try {
+    const updatedEvent = await EventModel.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedEvent) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error updating event' });
+  }
+});
+
+// Delete an event by ID
+app.delete('/events/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid event ID' });
+  }
+
+  try {
+    const deletedEvent = await EventModel.findByIdAndDelete(id);
+    if (!deletedEvent) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json({ message: 'Event deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error deleting event' });
+  }
+});
+// API route to fetch events
+app.get('/api/events', async (req, res) => {
+  try {
+    const events = await EventModel.find();
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch events', error });
+  }
+});
 
 // Start Server
 app.listen(3001, () => {
