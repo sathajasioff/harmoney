@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const ContactModel = require('./models/contact');
-const BranchModel = require('./models/Branch');
+const BranchModel = require('./models/branch');
 const EventModel = require('./models/event');
 
 

@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const AdminBranch = () => {
+// Define the type for the branch
+interface Branch {
+  _id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+  district: string;
+}
 
-  const [branches, setBranches] = useState([
-    { 
-      id: 1, 
-      name: 'New York Branch', 
-      address: '123 Finance Street, New York, NY 10001', 
-      phone: '+1 (555) 123-4567', 
-      email: 'newyork@harmonyinvestment.com', 
-      hours: 'Monday - Friday: 9AM - 5PM',
-      district: 'District 1',
-    },
-    { 
-      id: 2, 
-      name: 'Los Angeles Branch', 
-      address: '456 Sunset Blvd, Los Angeles, CA 90028', 
-      phone: '+1 (555) 987-6543', 
-      email: 'la@harmonyinvestment.com', 
-      hours: 'Monday - Friday: 9AM - 5PM',
-      district: 'District 2',
-    },
-  ]);
+const AdminBranch = () => {
+  // Use the Branch interface for state
+  const [branches, setBranches] = useState<Branch[]>([]);
+
+  // Fetch the branches data from the API on component mount
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/branches');
+        if (response.ok) {
+          const data: Branch[] = await response.json(); // Specify the type here
+          setBranches(data);
+        } else {
+          alert('Failed to fetch branches');
+        }
+      } catch (error) {
+        console.error('Error fetching branches:', error);
+        alert('An error occurred while fetching branches');
+      }
+    };
+
+    fetchBranches();
+  }, []);
+
+  // Delete a branch
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this branch?')) {
+      try {
+        const response = await fetch(`http://localhost:3001/branches/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          setBranches(branches.filter(branch => branch._id !== id));
+          alert('Branch deleted successfully');
+        } else {
+          alert('Failed to delete branch');
+        }
+      } catch (error) {
+        console.error('Error deleting branch:', error);
+        alert('An error occurred while deleting the branch');
+      }
+    }
+  };
 
   return (
     <div className="flex h-screen">
@@ -60,7 +93,7 @@ const AdminBranch = () => {
             </thead>
             <tbody>
               {branches.map(branch => (
-                <tr key={branch.id} className="text-center">
+                <tr key={branch._id} className="text-center">
                   <td className="border border-gray-300 px-4 py-2">{branch.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.district}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.address}</td>
@@ -68,8 +101,15 @@ const AdminBranch = () => {
                   <td className="border border-gray-300 px-4 py-2">{branch.email}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.hours}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                    <button className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                    <Link to={`/branchadd`} state={{ branch }}>
+                      <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
+                    </Link>
+                    <button
+                      className="bg-red-500 text-white px-3 py-1 rounded"
+                      onClick={() => handleDelete(branch._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

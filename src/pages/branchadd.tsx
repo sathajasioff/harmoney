@@ -1,142 +1,179 @@
-import React, { useState } from "react";
-import axios from "axios"; // Make sure axios is imported
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const Branchadd = () => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [district, setDistrict] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [hours, setHours] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+interface Branch {
+  _id?: string;
+  name: string;
+  address: string;
+  district: string;
+  phone: string;
+  email: string;
+  hours: string;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+const districts = [
+  'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
+  'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
+  'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
+  'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
+  'Moneragala', 'Ratnapura', 'Kegalle'
+];
+
+const BranchAdd = () => {
+  const [branch, setBranch] = useState<Branch>({
+    name: '',
+    address: '',
+    district: '',
+    phone: '',
+    email: '',
+    hours: '',
+  });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.branch) {
+      setBranch(location.state.branch);
+    }
+  }, [location.state]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setBranch({ ...branch, [name]: value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!name || !address || !district || !phone || !email || !hours) {
-      setErrorMessage("All fields are required.");
-      return;
-    }
+    try {
+      const method = branch._id ? 'PUT' : 'POST'; // Use PUT for edit, POST for add
+      const url = branch._id ? `http://localhost:3001/branches/${branch._id}` : 'http://localhost:3001/branches';
 
-    // Create a new branch object
-    const branchData = { name, address, district, phone, email, hours };
-
-    // Send the data to the backend API
-    axios
-      .post("http://localhost:3001/Branch", branchData)
-      .then((result) => {
-        console.log(result);
-        alert("Branch added successfully!");
-        // Reset form data after successful submission
-        setName("");
-        setAddress("");
-        setDistrict("");
-        setPhone("");
-        setEmail("");
-        setHours("");
-        setErrorMessage(""); // Clear any error messages
-      })
-      .catch((error) => {
-        console.error("There was an error adding the branch:", error);
-        
-        // If the error response has a message, use it; otherwise, show a generic message
-        const errorResponseMessage = error.response?.data?.message || "Failed to add the branch. Please try again later.";
-        setErrorMessage(errorResponseMessage);
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(branch),
       });
+
+      if (response.ok) {
+        alert('Branch saved successfully');
+        navigate('/adminbranch');
+      } else {
+        alert('Failed to save branch');
+      }
+    } catch (error) {
+      console.error('Error saving branch:', error);
+      alert('An error occurred while saving the branch');
+    }
   };
 
   return (
-    <div className="flex justify-center items-center p-8">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-        <h1 className="text-3xl font-bold mb-6 text-gray-700">Add New Branch</h1>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="bg-white shadow-lg p-8 rounded-lg w-96">
+        <h2 className="text-2xl font-bold mb-4">{branch._id ? 'Edit Branch' : 'Add Branch'}</h2>
 
-        {/* Display error message if any */}
-        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+        {/* Branch Name */}
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-700">Branch Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={branch.name}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700">Branch Name</label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
+        {/* Address */}
+        <div className="mb-4">
+          <label htmlFor="address" className="block text-gray-700">Branch Address</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={branch.address}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
+          />
+        </div>
 
-          <div className="mb-4">
-            <label htmlFor="address" className="block text-gray-700">Address</label>
-            <input
-              type="text"
-              id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="district" className="block text-gray-700">District</label>
-            <input
-              type="text"
-              id="district"
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="phone" className="block text-gray-700">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="hours" className="block text-gray-700">Business Hours</label>
-            <input
-              type="text"
-              id="hours"
-              value={hours}
-              onChange={(e) => setHours(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4"
+        {/* District */}
+        <div className="mb-4">
+          <label htmlFor="district" className="block text-gray-700">District</label>
+          <select
+            id="district"
+            name="district"
+            value={branch.district}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
           >
-            Add Branch
-          </button>
-        </form>
-      </div>
+            <option value="">Select District</option>
+            {districts.map((district, index) => (
+              <option key={index} value={district}>
+                {district}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Phone */}
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-gray-700">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            value={branch.phone}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
+          />
+        </div>
+
+        {/* Email */}
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-700">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={branch.email}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
+          />
+        </div>
+
+        {/* Working Hours */}
+        <div className="mb-4">
+          <label htmlFor="hours" className="block text-gray-700">Working Hours</label>
+          <input
+            type="text"
+            id="hours"
+            name="hours"
+            value={branch.hours}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4"
+        >
+          {branch._id ? 'Update Branch' : 'Add Branch'}
+        </button>
+      </form>
     </div>
   );
 };
 
-export default Branchadd;
+export default BranchAdd;
