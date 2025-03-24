@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';  // Make sure axios is imported
 
-
 const Contact = () => {
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
- 
-
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,24 +21,22 @@ const Contact = () => {
     axios.post("http://localhost:3001/Contact", { name, subject, email, message })
       .then((result) => {
         console.log(result);
-        alert('Message sent successfully!');
-      setName('');
-      setSubject('');
-      setEmail('');
-      setMessage('');
-      setErrorMessage('');
+        setSuccessMessage('Message sent successfully!');
+        setName('');
+        setSubject('');
+        setEmail('');
+        setMessage('');
+        setErrorMessage('');
       })
-   
       .catch((error) => {
         console.error("There was an error sending the message:", error);
         setErrorMessage('Failed to send the message. Please try again later.');
+        setSuccessMessage('');  // Clear success message on error
       });
-
-    setErrorMessage('');  // Clear the error message
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" style={{ fontFamily: 'Nunito Sans', fontWeight: '600', fontSize: '16px', lineHeight: '100%', letterSpacing: '0%' }}>
       <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
         {/* Left side - Company details and map */}
         <div className="bg-white p-8 rounded-lg shadow-xl border border-gray-300">
@@ -129,10 +125,16 @@ const Contact = () => {
               />
             </div>
 
-            {/* Error Message */}
-            {errorMessage && <p className="text-red-600 text-sm mb-4">{errorMessage}</p>}
+            
+            {errorMessage && (
+  <p className="text-red-600 text-sm mb-4 fade-in">{errorMessage}</p>
+)}
 
-            {/* Submit Button */}
+{successMessage && (
+  <p className="text-green-600 text-sm mb-4 fade-in">{successMessage}</p>
+)}
+
+            
             <button type="submit" className="w-full py-2 bg-harmony-600 text-white rounded-md hover:bg-harmony-700">
               Send Message
             </button>
