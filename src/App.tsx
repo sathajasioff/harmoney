@@ -23,6 +23,8 @@ import Eventadd from "./pages/eventadd";
 
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login"; 
+import Logout from "./pages/logout";  // Match case exactly
+
 
 
 
@@ -89,6 +91,9 @@ const App = () => (
           <Route path="/branchadd" element={<Branchadd />} />
           <Route path="/eventadd" element={<Eventadd/>} />
           <Route path="/login" element={<Login />} /> {/* Add Login route */}
+          <Route path="/Logout" element={<Logout />} />
+{/* Capitalized Logout component */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
