@@ -21,14 +21,10 @@ const branchSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid phone number!`,
     },
   },
-  email: {
+  manager: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v),
-      message: (props) => `${props.value} is not a valid email!`,
     },
-  },
   hours: {
     type: String,
     required: true,

@@ -7,7 +7,7 @@ interface Branch {
   name: string;
   address: string;
   phone: string;
-  email: string;
+  manager: string;
   hours: string;
   district: string;
 }
@@ -86,7 +86,7 @@ const AdminBranch = () => {
                 <th className="border border-gray-300 px-4 py-2">District</th>
                 <th className="border border-gray-300 px-4 py-2">Address</th>
                 <th className="border border-gray-300 px-4 py-2">Phone</th>
-                <th className="border border-gray-300 px-4 py-2">Email</th>
+                <th className="border border-gray-300 px-4 py-2">Manager Name</th>
                 <th className="border border-gray-300 px-4 py-2">Hours</th>
                 <th className="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
@@ -98,7 +98,7 @@ const AdminBranch = () => {
                   <td className="border border-gray-300 px-4 py-2">{branch.district}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.address}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.phone}</td>
-                  <td className="border border-gray-300 px-4 py-2">{branch.email}</td>
+                  <td className="border border-gray-300 px-4 py-2">{branch.manager}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.hours}</td>
                   <td className="border border-gray-300 px-4 py-2">
                     <Link to={`/branchadd`} state={{ branch }}>
