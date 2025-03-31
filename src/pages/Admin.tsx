@@ -32,11 +32,6 @@ const Admin = () => {
             </Link>
           </li>
           <li>
-            <Link to="/adminuser" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-              Users Management
-            </Link>
-          </li>
-          <li>
             <Link to="/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
               Contact Us Request
             </Link>

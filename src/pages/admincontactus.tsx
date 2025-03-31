@@ -51,7 +51,6 @@ const AdminContactUs = () => {
       <div className="bg-gray-800 text-white w-64 p-6">
         <ul>
           <li className="mb-4"><Link to="/admin" className="hover:text-gray-400">Dashboard</Link></li>
-          <li className="mb-4"><Link to="/adminuser" className="hover:text-gray-400">Users Management</Link></li>
           <li className="mb-4"><Link to="/admincontactus" className="hover:text-gray-400">Contact Us Request</Link></li>
           <li className="mb-4"><Link to="/adminbranch" className="hover:text-gray-400">Branch Management</Link></li>
           <li className="mb-4"><Link to="/adminevent" className="hover:text-gray-400">Event Management</Link></li>

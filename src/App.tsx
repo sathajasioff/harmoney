@@ -14,7 +14,6 @@ import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import BranchDetails from "./pages/BranchDetails";
 import Admin from "./pages/Admin";
-import Adminuser from "./pages/adminuser";
 import Admincontactus from "./pages/admincontactus";
 import Adminbranch from "./pages/adminbranch";
 import Adminevent from "./pages/adminevent";
@@ -84,7 +83,6 @@ const App = () => (
             }
           />
           <Route path="/admin" element={<Admin />} /> {/* Admin route without Navbar */}
-          <Route path="/adminuser" element={<Adminuser />} />
           <Route path="/admincontactus" element={<Admincontactus />} />
           <Route path="/adminbranch" element={<Adminbranch />} />
           <Route path="/adminevent" element={<Adminevent />} />
