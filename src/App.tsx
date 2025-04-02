@@ -19,13 +19,10 @@ import Adminbranch from "./pages/adminbranch";
 import Adminevent from "./pages/adminevent";
 import Branchadd from "./pages/branchadd";
 import Eventadd from "./pages/eventadd";
-
+import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; 
 import Logout from "./pages/logout";  // Match case exactly
-
-
-
+import ProtectedRoute from './components/ProtectedRoute'; // Import your ProtectedRoute component
 
 const queryClient = new QueryClient();
 
@@ -36,7 +33,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Include Navbar on all pages except /admin */}
+          {/* Public routes */}
           <Route
             path="/"
             element={
@@ -82,16 +79,20 @@ const App = () => (
               </>
             }
           />
-          <Route path="/admin" element={<Admin />} /> {/* Admin route without Navbar */}
-          <Route path="/admincontactus" element={<Admincontactus />} />
-          <Route path="/adminbranch" element={<Adminbranch />} />
-          <Route path="/adminevent" element={<Adminevent />} />
-          <Route path="/branchadd" element={<Branchadd />} />
-          <Route path="/eventadd" element={<Eventadd/>} />
-          <Route path="/login" element={<Login />} /> {/* Add Login route */}
-          <Route path="/Logout" element={<Logout />} />
-{/* Capitalized Logout component */}
 
+          {/* Admin routes - Protected */}
+          <Route path="/Admin" element={<ProtectedRoute element={<Admin />} />} />
+          <Route path="/admincontactus" element={<ProtectedRoute element={<Admincontactus />} />} />
+          <Route path="/adminbranch" element={<ProtectedRoute element={<Adminbranch />} />} />
+          <Route path="/adminevent" element={<ProtectedRoute element={<Adminevent />} />} />
+          <Route path="/branchadd" element={<ProtectedRoute element={<Branchadd />} />} />
+          <Route path="/eventadd" element={<ProtectedRoute element={<Eventadd />} />} />
+          <Route path="/Logout" element={<Logout />} />
+
+          
+          <Route path="/AdminLogin" element={<AdminLogin />} />
+
+          {/* Fallback route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
