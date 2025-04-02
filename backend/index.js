@@ -4,7 +4,8 @@ const cors = require('cors');
 const ContactModel = require('./models/contact');
 const BranchModel = require('./models/branch');
 const EventModel = require('./models/event');
-
+const adminAuthRoutes = require('./routes/adminAuth');
+const adminAuth = require('./middleware/auth');
 
 
 const app = express();
@@ -22,6 +23,14 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.error('MongoDB Connection Error:', err));
 
+
+
+  app.use('/admin', adminAuthRoutes);
+
+// Protected Admin Route Example
+app.get('/admin/dashboard', adminAuth, (req, res) => {
+  res.json({ message: 'Welcome to the Admin Dashboard' });
+});
 // Contact Form Route
 app.post('/Contact', async (req, res) => {
   try {

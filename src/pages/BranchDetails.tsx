@@ -9,7 +9,7 @@ interface Branch {
   district: string;
   address: string;
   phone: string;
-  email: string;
+  manager: string;
   hours: string;
 }
 
@@ -58,7 +58,7 @@ const BranchDetails = () => {
           <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
             <p><strong>Address:</strong> {branch.address}</p>
             <p><strong>Phone:</strong> {branch.phone}</p>
-            <p><strong>Email:</strong> {branch.email}</p>
+            <p><strong>Manager:</strong> {branch.manager}</p>
             <p><strong>Hours:</strong> {branch.hours}</p>
           </div>
         </div>

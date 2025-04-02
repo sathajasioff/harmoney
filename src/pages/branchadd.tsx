@@ -7,7 +7,7 @@ interface Branch {
   address: string;
   district: string;
   phone: string;
-  email: string;
+  manager: string;
   hours: string;
 }
 
@@ -25,7 +25,7 @@ const BranchAdd = () => {
     address: '',
     district: '',
     phone: '',
-    email: '',
+    manager: '',
     hours: '',
   });
 
@@ -139,17 +139,18 @@ const BranchAdd = () => {
 
         {/* Email */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700">Email</label>
+          <label htmlFor="manager" className="block text-gray-700">Manager Name</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={branch.email}
+            type="text"
+            id="manager"
+            name="manager"
+            value={branch.manager}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded mt-2"
             required
           />
         </div>
+
 
         {/* Working Hours */}
         <div className="mb-4">

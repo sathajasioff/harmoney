@@ -14,19 +14,20 @@ import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import BranchDetails from "./pages/BranchDetails";
 import Admin from "./pages/Admin";
-import Adminuser from "./pages/adminuser";
 import Admincontactus from "./pages/admincontactus";
 import Adminbranch from "./pages/adminbranch";
 import Adminevent from "./pages/adminevent";
 import Branchadd from "./pages/branchadd";
 import Eventadd from "./pages/eventadd";
-
+import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; 
-
-
-
+import Logout from "./pages/logout";  // Match case exactly
+import ProtectedRoute from './components/ProtectedRoute'; // Import your ProtectedRoute component
+import PublicRoute from "./components/PublicRoute";
 const queryClient = new QueryClient();
+
+
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -35,60 +36,24 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Include Navbar on all pages except /admin */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <Index />
-              </>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <>
-                <Navbar />
-                <About />
-              </>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <>
-                <Navbar />
-                <Contact />
-              </>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <>
-                <Navbar />
-                <Profile />
-              </>
-            }
-          />
-          <Route
-            path="/branches/:location"
-            element={
-              <>
-                <Navbar />
-                <BranchDetails />
-              </>
-            }
-          />
-          <Route path="/admin" element={<Admin />} /> {/* Admin route without Navbar */}
-          <Route path="/adminuser" element={<Adminuser />} />
-          <Route path="/admincontactus" element={<Admincontactus />} />
-          <Route path="/adminbranch" element={<Adminbranch />} />
-          <Route path="/adminevent" element={<Adminevent />} />
-          <Route path="/branchadd" element={<Branchadd />} />
-          <Route path="/eventadd" element={<Eventadd/>} />
-          <Route path="/login" element={<Login />} /> {/* Add Login route */}
+          {/* Public Routes */}
+          <Route path="/" element={<><Navbar /><Index /></>} />
+          <Route path="/about" element={<><Navbar /><About /></>} />
+          <Route path="/contact" element={<><Navbar /><Contact /></>} />
+          <Route path="/profile" element={<><Navbar /><Profile /></>} />
+          <Route path="/branches/:location" element={<><Navbar /><BranchDetails /></>} />
+          <Route path="/AdminLogin" element={<ProtectedRoute element={<AdminLogin />} />} />
+
+          {/* Protected Admin Routes */}
+          <Route path="/Admin/Admin" element={<ProtectedRoute element={<Admin />} />} />
+          <Route path="/Admin/admincontactus" element={<ProtectedRoute element={<Admincontactus />} />} />
+          <Route path="/Admin/adminbranch" element={<ProtectedRoute element={<Adminbranch />} />} />
+          <Route path="/Admin/adminevent" element={<ProtectedRoute element={<Adminevent />} />} />
+          <Route path="/Admin/branchadd" element={<ProtectedRoute element={<Branchadd />} />} />
+          <Route path="/Admin/eventadd" element={<ProtectedRoute element={<Eventadd />} />} />
+          <Route path="/Admin/Logout" element={<Logout />} />
+
+          {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
@@ -97,3 +62,5 @@ const App = () => (
 );
 
 export default App;
+
+

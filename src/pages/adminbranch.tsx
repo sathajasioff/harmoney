@@ -7,7 +7,7 @@ interface Branch {
   name: string;
   address: string;
   phone: string;
-  email: string;
+  manager: string;
   hours: string;
   district: string;
 }
@@ -59,16 +59,36 @@ const AdminBranch = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="bg-gray-800 text-white w-64 p-6">
-        <ul>
-          <li className="mb-4"><Link to="/admin" className="hover:text-gray-400">Dashboard</Link></li>
-          <li className="mb-4"><Link to="/adminuser" className="hover:text-gray-400">Users Management</Link></li>
-          <li className="mb-4"><Link to="/admincontactus" className="hover:text-gray-400">Contact Us Requests</Link></li>
-          <li className="mb-4"><Link to="/adminbranch" className="hover:text-gray-400">Branch Management</Link></li>
-          <li className="mb-4"><Link to="/adminevent" className="hover:text-gray-400">Event Management</Link></li>
-          <li className="mb-4"><Link to="/logout" className="hover:text-gray-400">Logout</Link></li>
-        </ul>
-      </div>
+     <div className="bg-gray-900 text-white w-72 p-6 shadow-lg">
+             <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
+             <ul className="space-y-4">
+               <li>
+                 <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                   Dashboard
+                 </Link>
+               </li>
+               <li>
+                 <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                   Contact Us Request
+                 </Link>
+               </li>
+               <li>
+                 <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                   Branch Management
+                 </Link>
+               </li>
+               <li>
+                 <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                   Event Management
+                 </Link>
+               </li>
+               <li>
+                 <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
+                   Logout
+                 </Link>
+               </li>
+             </ul>
+           </div>
 
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Branch Management</h1>
@@ -86,7 +106,7 @@ const AdminBranch = () => {
                 <th className="border border-gray-300 px-4 py-2">District</th>
                 <th className="border border-gray-300 px-4 py-2">Address</th>
                 <th className="border border-gray-300 px-4 py-2">Phone</th>
-                <th className="border border-gray-300 px-4 py-2">Email</th>
+                <th className="border border-gray-300 px-4 py-2">Manager Name</th>
                 <th className="border border-gray-300 px-4 py-2">Hours</th>
                 <th className="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
@@ -98,7 +118,7 @@ const AdminBranch = () => {
                   <td className="border border-gray-300 px-4 py-2">{branch.district}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.address}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.phone}</td>
-                  <td className="border border-gray-300 px-4 py-2">{branch.email}</td>
+                  <td className="border border-gray-300 px-4 py-2">{branch.manager}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.hours}</td>
                   <td className="border border-gray-300 px-4 py-2">
                     <Link to={`/branchadd`} state={{ branch }}>
