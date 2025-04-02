@@ -27,7 +27,7 @@ const AdminLogin: React.FC = () => {
       localStorage.setItem("adminToken", response.data.token);
       localStorage.setItem("userRole", "admin");
 
-      navigate("/admin"); // Redirect to admin dashboard
+      navigate("/admin/admin"); // Redirect to admin dashboard
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Invalid email or password.");

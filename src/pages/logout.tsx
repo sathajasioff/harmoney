@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const navigate = useNavigate();
-
+const Logout = () => {
+    localStorage.removeItem("adminToken"); // Remove the token from localStorage
+    window.location.href = "/AdminLogin"; // Redirect to the login page
+  };
+  
   useEffect(() => {
-    // Clear session data or token (if using any)
-    localStorage.removeItem("userToken"); // Example, adjust based on your setup
-    sessionStorage.removeItem("userToken"); // Example, adjust based on your setup
-
-    // Redirect to the home page
-    navigate("/"); // Home page URL
+    localStorage.removeItem("adminToken"); // Remove token
+    navigate("/AdminLogin"); // Redirect to login page
   }, [navigate]);
 
-  return <div>Logging out...</div>; // Show a message or loading state during logout
+  return null; // No UI needed
 };
 
 export default Logout;

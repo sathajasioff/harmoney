@@ -23,8 +23,11 @@ import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import Logout from "./pages/logout";  // Match case exactly
 import ProtectedRoute from './components/ProtectedRoute'; // Import your ProtectedRoute component
-
+import PublicRoute from "./components/PublicRoute";
 const queryClient = new QueryClient();
+
+
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -33,66 +36,24 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Public routes */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <Index />
-              </>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <>
-                <Navbar />
-                <About />
-              </>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <>
-                <Navbar />
-                <Contact />
-              </>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <>
-                <Navbar />
-                <Profile />
-              </>
-            }
-          />
-          <Route
-            path="/branches/:location"
-            element={
-              <>
-                <Navbar />
-                <BranchDetails />
-              </>
-            }
-          />
+          {/* Public Routes */}
+          <Route path="/" element={<><Navbar /><Index /></>} />
+          <Route path="/about" element={<><Navbar /><About /></>} />
+          <Route path="/contact" element={<><Navbar /><Contact /></>} />
+          <Route path="/profile" element={<><Navbar /><Profile /></>} />
+          <Route path="/branches/:location" element={<><Navbar /><BranchDetails /></>} />
+          <Route path="/AdminLogin" element={<ProtectedRoute element={<AdminLogin />} />} />
 
-          {/* Admin routes - Protected */}
-          <Route path="/Admin" element={<ProtectedRoute element={<Admin />} />} />
-          <Route path="/admincontactus" element={<ProtectedRoute element={<Admincontactus />} />} />
-          <Route path="/adminbranch" element={<ProtectedRoute element={<Adminbranch />} />} />
-          <Route path="/adminevent" element={<ProtectedRoute element={<Adminevent />} />} />
-          <Route path="/branchadd" element={<ProtectedRoute element={<Branchadd />} />} />
-          <Route path="/eventadd" element={<ProtectedRoute element={<Eventadd />} />} />
-          <Route path="/Logout" element={<Logout />} />
+          {/* Protected Admin Routes */}
+          <Route path="/Admin/Admin" element={<ProtectedRoute element={<Admin />} />} />
+          <Route path="/Admin/admincontactus" element={<ProtectedRoute element={<Admincontactus />} />} />
+          <Route path="/Admin/adminbranch" element={<ProtectedRoute element={<Adminbranch />} />} />
+          <Route path="/Admin/adminevent" element={<ProtectedRoute element={<Adminevent />} />} />
+          <Route path="/Admin/branchadd" element={<ProtectedRoute element={<Branchadd />} />} />
+          <Route path="/Admin/eventadd" element={<ProtectedRoute element={<Eventadd />} />} />
+          <Route path="/Admin/Logout" element={<Logout />} />
 
-          
-          <Route path="/AdminLogin" element={<AdminLogin />} />
-
-          {/* Fallback route */}
+          {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
@@ -101,3 +62,5 @@ const App = () => (
 );
 
 export default App;
+
+

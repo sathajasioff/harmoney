@@ -27,27 +27,27 @@ const Admin = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
         <ul className="space-y-4">
           <li>
-            <Link to="/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+            <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
               Dashboard
             </Link>
           </li>
           <li>
-            <Link to="/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+            <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
               Contact Us Request
             </Link>
           </li>
           <li>
-            <Link to="/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+            <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
               Branch Management
             </Link>
           </li>
           <li>
-            <Link to="/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+            <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
               Event Management
             </Link>
           </li>
           <li>
-            <Link to="/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
+            <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
               Logout
             </Link>
           </li>
