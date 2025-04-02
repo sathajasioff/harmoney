@@ -144,6 +144,17 @@ app.delete('/branches/:id', async (req, res) => {
   }
 });
 
+//get all users
+app.get('/users/count', async (req, res) => {
+  try {
+    const count = await User.countDocuments();
+    res.json({ totalUsers: count });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching user count' });
+  }
+});
+
 
 
 
