@@ -1,47 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './styles.css'; 
 
 const AdminContactUs = () => {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState({ message: '', type: '' });
 
-  // Fetch messages from API
   useEffect(() => {
     axios.get('http://localhost:3001/ContactMessages')
       .then((response) => {
         setMessages(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching messages:', error);
+        setAlertMessage({ message: 'Error fetching messages', type: 'error' });
       });
   }, []);
 
-  // Function to fetch and show a message in the modal
-  const handleView = async (id: string) => {
+  const handleView = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3001/ContactMessages/${id}`);
       setSelectedMessage(response.data);
       setIsModalOpen(true);
     } catch (error) {
-      console.error('Error fetching message details:', error);
-      alert('Failed to fetch message details.');
+      setAlertMessage({ message: 'Failed to fetch message details.', type: 'error' });
     }
   };
 
-  // Function to handle message deletion
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/ContactMessages/${id}`);
-      
-      // Update state to remove the deleted message
       setMessages(messages.filter((message) => message._id !== id));
-      
-      alert('Message deleted successfully');
+      setAlertMessage({ message: 'Message deleted successfully.', type: 'success' });
     } catch (error) {
-      console.error('Error deleting message:', error);
-      alert('Failed to delete the message');
+      setAlertMessage({ message: 'Failed to delete the message.', type: 'error' });
     }
   };
 
@@ -49,39 +43,43 @@ const AdminContactUs = () => {
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="bg-gray-900 text-white w-72 p-6 shadow-lg">
-              <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
-              <ul className="space-y-4">
-                <li>
-                  <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-                    Contact Us Request
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-                    Branch Management
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-                    Event Management
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
-                    Logout
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-      {/* Main Content */}
+        <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
+        <ul className="space-y-4">
+          <li>
+            <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Contact Us Request
+            </Link>
+          </li>
+          <li>
+            <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Branch Management
+            </Link>
+          </li>
+          <li>
+            <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+              Event Management
+            </Link>
+          </li>
+          <li>
+            <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
+              Logout
+            </Link>
+          </li>
+        </ul>
+      </div>
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Contact Us Requests</h1>
+
+        {alertMessage.message && (
+          <div className={`alert ${alertMessage.type === 'success' ? 'alert-success' : alertMessage.type === 'error' ? 'alert-error' : 'alert-warning'}`}>
+            {alertMessage.message}
+          </div>
+        )}
 
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
           <table className="min-w-full table-auto">
@@ -149,7 +147,6 @@ const AdminContactUs = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

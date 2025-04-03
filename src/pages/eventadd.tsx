@@ -17,16 +17,22 @@ const EventAdd = () => {
     description: "",
   });
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.event) {
-      setEvent(location.state.event);
+      const existingEvent = location.state.event;
+  
+      setEvent({
+        ...existingEvent,
+        date: existingEvent.date ? existingEvent.date.split("T")[0] : "",
+      });
     }
   }, [location.state]);
+  
+
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -36,22 +42,16 @@ const EventAdd = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
-      setEvent({ ...event, image: URL.createObjectURL(file) });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEvent({ ...event, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-
-    formData.append("name", event.name);
-    formData.append("date", event.date);
-    formData.append("description", event.description);
-
-    if (selectedFile) {
-      formData.append("image", selectedFile);
-    }
 
     try {
       const method = event._id ? "PUT" : "POST";
@@ -61,7 +61,10 @@ const EventAdd = () => {
 
       const response = await fetch(url, {
         method,
-        body: formData, // Send FormData instead of JSON
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(event),
       });
 
       if (response.ok) {
@@ -82,7 +85,7 @@ const EventAdd = () => {
         <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">
           {event._id ? "Edit Event" : "Add Event"}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Event Name */}
           <div>
             <label htmlFor="name" className="block text-gray-700 font-medium mb-1">
@@ -143,7 +146,6 @@ const EventAdd = () => {
               onChange={handleImageChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               accept="image/*"
-              required
             />
           </div>
 

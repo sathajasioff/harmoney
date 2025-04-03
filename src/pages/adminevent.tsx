@@ -16,6 +16,7 @@ const AdminEvent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Function to fetch events
     const fetchEvents = async () => {
       try {
         const response = await fetch('http://localhost:3001/events');
@@ -31,8 +32,8 @@ const AdminEvent = () => {
       }
     };
 
-    fetchEvents();
-    const interval = setInterval(fetchEvents, 10000);
+    fetchEvents(); 
+    const interval = setInterval(fetchEvents, 10000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -58,44 +59,43 @@ const AdminEvent = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   };
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <div className="bg-gray-900 text-white w-72 p-6 shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
-        <ul className="space-y-4">
-          <li>
-            <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-              Contact Us Request
-            </Link>
-          </li>
-          <li>
-            <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-              Branch Management
-            </Link>
-          </li>
-          <li>
-            <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
-              Event Management
-            </Link>
-          </li>
-          <li>
-            <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
-              Logout
-            </Link>
-          </li>
-        </ul>
-      </div>
+              <h2 className="text-2xl font-bold mb-6 text-center">Admin Panel</h2>
+              <ul className="space-y-4">
+                <li>
+                  <Link to="/Admin/admin" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Admin/admincontactus" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                    Contact Us Request
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Admin/adminbranch" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                    Branch Management
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Admin/adminevent" className="block py-2 px-4 rounded-md transition hover:bg-gray-700">
+                    Event Management
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Admin/logout" className="block py-2 px-4 rounded-md transition hover:bg-red-700">
+                    Logout
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-      {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Event Management</h1>
         
@@ -103,7 +103,6 @@ const AdminEvent = () => {
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
-        {/* Event Table */}
         <div className="bg-white shadow-lg rounded-lg p-4 mb-6">
           <table className="w-full border-collapse border border-gray-300">
             <thead>
@@ -112,7 +111,6 @@ const AdminEvent = () => {
                 <th className="border border-gray-300 px-4 py-2">Event Name</th>
                 <th className="border border-gray-300 px-4 py-2">Date</th>
                 <th className="border border-gray-300 px-4 py-2">Description</th>
-                <th className="border border-gray-300 px-4 py-2">Created At</th>
                 <th className="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -120,17 +118,11 @@ const AdminEvent = () => {
               {events.map(event => (
                 <tr key={event._id} className="text-center">
                   <td className="border border-gray-300 px-4 py-2">
-                    <img 
-                      src={event.image} 
-                      alt={event.name} 
-                      className="w-24 h-24 object-contain rounded" 
-                      loading="lazy" 
-                    />
+                    <img src={event.image} alt={event.name} className="w-16 h-16 object-cover rounded" />
                   </td>
                   <td className="border border-gray-300 px-4 py-2">{event.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{formatDate(event.date)}</td>
                   <td className="border border-gray-300 px-4 py-2">{event.description || 'No description available'}</td>
-                  <td className="border border-gray-300 px-4 py-2">{event.createdAt ? formatDate(event.createdAt) : 'N/A'}</td>
                   <td className="border border-gray-300 px-4 py-2">
                     <button
                       onClick={() => editEvent(event)}
