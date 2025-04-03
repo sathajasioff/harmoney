@@ -28,11 +28,11 @@ mongoose
 
   app.use('/admin', adminAuthRoutes);
 
-// Protected Admin Route Example
+
 app.get('/admin/dashboard', adminAuth, (req, res) => {
   res.json({ message: 'Welcome to the Admin Dashboard' });
 });
-// Contact Form Route
+
 app.post('/Contact', async (req, res) => {
   try {
     const contact = await ContactModel.create(req.body);

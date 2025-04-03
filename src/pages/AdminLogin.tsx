@@ -11,8 +11,8 @@ const AdminLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(""); // Reset error message
-    setLoading(true); // Start loading
+    setError(""); 
+    setLoading(true); 
 
     if (!email || !password) {
       setError("Both email and password are required.");
