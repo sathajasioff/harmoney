@@ -103,7 +103,26 @@ app.post('/branches', async (req, res) => {
   }
 });
 
+app.put('/branches/:id', async (req, res) => {
+  const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid branch ID' });
+  }
+
+  try {
+    const updatedBranch = await BranchModel.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+
+    if (!updatedBranch) {
+      return res.status(404).json({ error: 'Branch not found' });
+    }
+
+    res.json(updatedBranch);
+  } catch (err) {
+    console.error('Error updating branch:', err);
+    res.status(500).json({ error: 'Failed to update the branch. Please try again later.' });
+  }
+});
 // Get all branches
 app.get('/branches', async (req, res) => {
   try {
@@ -152,14 +171,6 @@ app.delete('/branches/:id', async (req, res) => {
     res.status(500).json({ error: 'Error deleting branch' });
   }
 });
-
-
-
-
-
-
-
-
 // Create an event
 app.post('/events', async (req, res) => {
   try {

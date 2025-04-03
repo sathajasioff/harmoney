@@ -17,6 +17,8 @@ const EventAdd = () => {
     description: "",
   });
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,16 +36,22 @@ const EventAdd = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEvent({ ...event, image: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+      setSelectedFile(file);
+      setEvent({ ...event, image: URL.createObjectURL(file) });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("name", event.name);
+    formData.append("date", event.date);
+    formData.append("description", event.description);
+
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
 
     try {
       const method = event._id ? "PUT" : "POST";
@@ -53,15 +61,12 @@ const EventAdd = () => {
 
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(event),
+        body: formData, // Send FormData instead of JSON
       });
 
       if (response.ok) {
         alert("Event saved successfully");
-        navigate("/adminevent");
+        navigate("/admin/adminevent");
       } else {
         alert("Failed to save event");
       }
@@ -77,7 +82,7 @@ const EventAdd = () => {
         <h2 className="text-3xl font-semibold text-gray-800 text-center mb-6">
           {event._id ? "Edit Event" : "Add Event"}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
           {/* Event Name */}
           <div>
             <label htmlFor="name" className="block text-gray-700 font-medium mb-1">

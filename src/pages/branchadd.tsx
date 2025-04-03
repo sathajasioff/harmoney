@@ -11,6 +11,7 @@ interface Branch {
   hours: string;
 }
 
+// List of districts
 const districts = [
   'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
   'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
@@ -20,6 +21,9 @@ const districts = [
 ];
 
 const BranchAdd = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [branch, setBranch] = useState<Branch>({
     name: '',
     address: '',
@@ -29,44 +33,54 @@ const BranchAdd = () => {
     hours: '',
   });
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
+  // Load branch data for editing
   useEffect(() => {
     if (location.state?.branch) {
       setBranch(location.state.branch);
     }
   }, [location.state]);
 
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setBranch({ ...branch, [name]: value });
+    setBranch((prevBranch) => ({ ...prevBranch, [name]: value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
+    // Validate form
+    if (!branch.name || !branch.address || !branch.district || !branch.phone || !branch.manager || !branch.hours) {
+      alert('Please fill in all fields.');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const method = branch._id ? 'PUT' : 'POST'; // Use PUT for edit, POST for add
+      const method = branch._id ? 'PUT' : 'POST';
       const url = branch._id ? `http://localhost:3001/branches/${branch._id}` : 'http://localhost:3001/branches';
 
       const response = await fetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(branch),
       });
 
       if (response.ok) {
-        alert('Branch saved successfully');
-        navigate('/adminbranch');
+        alert(branch._id ? 'Branch updated successfully' : 'Branch added successfully');
+        navigate('/admin/adminbranch'); // Redirect after success
       } else {
         alert('Failed to save branch');
       }
     } catch (error) {
       console.error('Error saving branch:', error);
       alert('An error occurred while saving the branch');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,9 +130,7 @@ const BranchAdd = () => {
           >
             <option value="">Select District</option>
             {districts.map((district, index) => (
-              <option key={index} value={district}>
-                {district}
-              </option>
+              <option key={index} value={district}>{district}</option>
             ))}
           </select>
         </div>
@@ -137,7 +149,7 @@ const BranchAdd = () => {
           />
         </div>
 
-        {/* Email */}
+        {/* Manager Name */}
         <div className="mb-4">
           <label htmlFor="manager" className="block text-gray-700">Manager Name</label>
           <input
@@ -150,7 +162,6 @@ const BranchAdd = () => {
             required
           />
         </div>
-
 
         {/* Working Hours */}
         <div className="mb-4">
@@ -166,11 +177,13 @@ const BranchAdd = () => {
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg mt-4"
+          disabled={loading}
         >
-          {branch._id ? 'Update Branch' : 'Add Branch'}
+          {loading ? 'Saving...' : branch._id ? 'Update Branch' : 'Add Branch'}
         </button>
       </form>
     </div>

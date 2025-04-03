@@ -42,7 +42,7 @@ const App = () => (
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
           <Route path="/profile" element={<><Navbar /><Profile /></>} />
           <Route path="/branches/:location" element={<><Navbar /><BranchDetails /></>} />
-          <Route path="/AdminLogin" element={<ProtectedRoute element={<AdminLogin />} />} />
+          <Route path="/AdminLogin" element={<PublicRoute element={<AdminLogin />} />} />
 
           {/* Protected Admin Routes */}
           <Route path="/Admin/Admin" element={<ProtectedRoute element={<Admin />} />} />

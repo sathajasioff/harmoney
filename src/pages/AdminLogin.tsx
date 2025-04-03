@@ -23,11 +23,14 @@ const AdminLogin: React.FC = () => {
     try {
       const response = await axios.post("http://localhost:3001/admin/login", { email, password });
 
-      // Store token and role in localStorage
-      localStorage.setItem("adminToken", response.data.token);
-      localStorage.setItem("userRole", "admin");
+      if (response.data.token) {
+        // Store token and role in localStorage
+        localStorage.setItem("adminToken", response.data.token);
+        localStorage.setItem("userRole", "admin");
 
-      navigate("/admin/admin"); // Redirect to admin dashboard
+        // Redirect to Admin Dashboard
+        navigate("/admin/admin");
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Invalid email or password.");

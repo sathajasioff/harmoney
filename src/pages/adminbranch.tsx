@@ -93,7 +93,7 @@ const AdminBranch = () => {
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Branch Management</h1>
 
-        <Link to="/branchadd">
+        <Link to="/admin/branchadd">
           <button className="bg-green-500 text-white px-6 py-2 rounded mb-6">Add Branch</button>
         </Link>
 
@@ -121,7 +121,7 @@ const AdminBranch = () => {
                   <td className="border border-gray-300 px-4 py-2">{branch.manager}</td>
                   <td className="border border-gray-300 px-4 py-2">{branch.hours}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <Link to={`/branchadd`} state={{ branch }}>
+                    <Link to={`/admin/branchadd`} state={{ branch }}>
                       <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Edit</button>
                     </Link>
                     <button
